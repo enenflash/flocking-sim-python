@@ -8,6 +8,8 @@ https://en.wikipedia.org/wiki/Boids
 ## Demo
 Run main.py
 
-Left click to place an obstacle for the boids to avoid. They will also avoid your mouse.
+Left-click to place an obstacle for the boids to avoid. They will also avoid your mouse.
+
+Right-click to add more boids.
 
 </span>

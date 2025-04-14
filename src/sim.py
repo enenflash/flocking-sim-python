@@ -99,8 +99,12 @@ class Sim:
 
         if 1 in mousedowns:
             self.obstacles.append(Obstacle(15, Vector(pg.mouse.get_pos()[0], pg.mouse.get_pos()[1])))
-        if 2 in mousedowns:
+            print("> Placed Obstacle")
+            print("> Total Obstacles:", len(self.obstacles))
+        if 3 in mousedowns:
             self.boids.append(Boid(BOID_SIZE, BOID_MAX_SPEED, pg.mouse.get_pos(), random.randint(0, 359)))
+            print("> Added Boid")
+            print("> Total Boids:", len(self.boids))
 
         self.screen.fill("BLACK")
 
@@ -128,7 +132,6 @@ class Sim:
         while self.running:
             event_types = [i.type for i in self.events]
             if pg.QUIT in event_types or pg.K_ESCAPE in self.keydowns:
-                print("[*] ANTI-GRAVITY closing . . .")
                 self.running = False
 
             self.update()
