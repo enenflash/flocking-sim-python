@@ -9,6 +9,10 @@ class Vector:
             raise TypeError(f"cannot create Vector with types {type(i)} and {type(j)}")
         self.i, self.j = i, j
 
+    @staticmethod
+    def from_tuple(components:tuple[int|float, int|float]) -> Vector:
+        return Vector(components[0], components[1])
+
     @property
     def tup(self) -> tuple:
         return (self.i, self.j)

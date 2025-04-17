@@ -19,6 +19,10 @@ class Boid:
     def pos(self) -> tuple:
         return (self.x, self.y)
     
+    @pos.setter
+    def pos(self, new_pos:tuple[float, float]) -> None:
+        self.x, self.y = new_pos
+    
     @property
     def posv(self) -> Vector:
         return Vector(self.x, self.y)
@@ -86,6 +90,3 @@ class Boid:
         avoid_v = self.__get_obstacle_avoidance_vector(local_obstacles)
 
         self.__calculate_move(delta_time, (noise_v*0.5+seperation_v*2+alignment_v*5+cohesion_v*0.4+avoid_v*7)/15)
-
-    def set_pos(self, new_pos:tuple[int|float, int|float]) -> None:
-        self.x, self.y = new_pos
