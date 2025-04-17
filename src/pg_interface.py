@@ -22,7 +22,7 @@ class PGInterface:
 
         pg.display.set_caption(f"Flocking Simulation")
 
-    def update(self, num_boids, num_obstacles) -> None:
+    def update(self, num_boids:int, num_obstacles:int) -> None:
         self.__events = pg.event.get()
         self.__delta_time = self.__clock.tick(FPS)
         self.__keydowns = [event.key for event in self.__events if event.type == pg.KEYDOWN]
@@ -39,8 +39,14 @@ class PGInterface:
     def get_delta_time(self) -> float:
         return self.__delta_time
     
-    def get_keydowns(self) -> list:
-        return self.__keydowns
+    def check_add_obstacle(self) -> bool:
+        return 1 in self.get_mousedowns()
+    
+    def check_add_boid(self) -> bool:
+        return 3 in self.get_mousedowns()
+    
+    def check_increment_target_boid_index(self) -> bool:
+        return pg.K_TAB in self.__keydowns
     
     def get_mousedowns(self) -> list:
         return [event.button for event in self.__events if event.type == pg.MOUSEBUTTONDOWN]
@@ -53,8 +59,6 @@ class PGInterface:
 
     def draw_boid_details(self, boid:Boid) -> None:
         pg.draw.circle(self.__screen, "#999999", boid.pos, BOID_LOCAL/2)
-        pg.draw.line(self.__screen, "RED", boid.pos, boid.heading_line)
-        pg.draw.polygon(self.__screen, "RED", boid.draw_points, 3)
 
     def draw_boid(self, boid:Boid) -> None:
         pg.draw.line(self.__screen, boid.colour, boid.pos, boid.heading_line)
