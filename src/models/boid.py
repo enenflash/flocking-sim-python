@@ -13,7 +13,6 @@ class Boid(ABC):
         :param tuple|Vector initial_pos: initial position vector of boid
         :param int|float initial_heading_degrees: initial heading of boid in degrees (will be converted to radians)
         """
-        super().__init__(size, "#FFFFFF", max_speed, avoid_dist, initial_pos, initial_heading_degrees)
         
         self.radius = size/2
         self.max_speed = max_speed
