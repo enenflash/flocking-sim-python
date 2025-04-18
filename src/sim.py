@@ -1,7 +1,5 @@
 from .settings import *
-from .vector import *
-from .obstacle import *
-from .boid import *
+from .models import *
 
 class Mouse:
     def __init__ (self) -> None:
@@ -29,7 +27,7 @@ class Sim:
         self.mouse = Mouse()
 
         # list of boids and obstacles
-        self.boids = [Boid(BOID_SIZE, BOID_MAX_SPEED, Vector.from_tuple(self.output_interface.get_random_screen_position()), random.randint(0, 359)) for _ in range(NUM_BOIDS)]
+        self.boids = [SimpleBoid(BOID_SIZE, BOID_MAX_SPEED, Vector.from_tuple(self.output_interface.get_random_screen_position()), random.randint(0, 359), BOID_AVOID_DIST) for _ in range(NUM_BOIDS)]
         self.obstacles = []
 
         # store boid distance data to prevent recalculation with every boid
@@ -61,7 +59,7 @@ class Sim:
         """
         return [obstacle.posv for obstacle in self.obstacles+[self.mouse] if (obstacle.posv-self.boids[boid_index].posv).magnitude <= OBSTACLE_AVOID_DIST + obstacle.radius]
     
-    def __keep_boid_onscreen(self, boid:Boid) -> None:
+    def __keep_boid_onscreen(self, boid:SimpleBoid) -> None:
         """
         Modify boid position such that it is always onscreen
         """
@@ -80,7 +78,7 @@ class Sim:
         print(" Placed Obstacle")
 
     def add_boid(self, size:int|float, max_speed:int|float, position:tuple[int|float, int|float], heading:int|float=0) -> None:
-        self.boids.append(Boid(size, max_speed, Vector(position[0], position[1]), heading))
+        self.boids.append(SimpleBoid(size, max_speed, Vector(position[0], position[1]), heading, BOID_AVOID_DIST))
         print(" Added Boid")
 
     def increment_target_boid_index(self) -> None:

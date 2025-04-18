@@ -1,63 +1,20 @@
 import math, random
 
-from .settings import *
+from .boid import *
 from .vector import *
 
-class Boid:
-    def __init__ (self, size:int|float, max_speed:int|float,  posv:tuple|Vector, heading_degrees:int|float) -> None:
+class SimpleBoid(Boid):
+    def __init__ (self, size:int|float, max_speed:int|float,  initial_pos:tuple|Vector, initial_heading_degrees:int|float, avoid_dist:int|float) -> None:
         """
-        Class representing a boid https://en.wikipedia.org/wiki/Boids
+        Simple boid that flocks with other boids https://en.wikipedia.org/wiki/Boids
 
         :param int|float size: maximum size of boid in a given unit (if drawing to screen then pixels)
         :param int|float max_speed: maximum speed of boid unit/ms
-        :param tuple|Vector posv: initial position vector of boid
-        :param int|float heading: initial heading of boid in degrees (will be converted to radians)
+        :param tuple|Vector initial_pos: initial position vector of boid
+        :param int|float initial_heading_degrees: initial heading of boid in degrees (will be converted to radians)
+        :param int|float avoid_dist: avoid distance of boid from other boids
         """
-        self.radius = size/2
-        self.max_speed = max_speed
-        if type(posv) == tuple:
-            posv = Vector(posv[0], posv[1])
-        self.x, self.y = posv.i, posv.j
-        self.heading = heading_degrees*math.pi/180
-        self.colour = "#FFFFFF"
-        
-        self.get_draw_point = lambda angle, scale=1: (math.cos(angle)*self.radius*scale+self.x, math.sin(angle)*self.radius*scale+self.y)
-
-    @property
-    def pos(self) -> tuple:
-        """
-        Boid position as tuple
-        """
-        return (self.x, self.y)
-    
-    @pos.setter
-    def pos(self, new_pos:tuple[float, float]) -> None:
-        self.x, self.y = new_pos
-    
-    @property
-    def posv(self) -> Vector:
-        """
-        Boid position as position vector
-        """
-        return Vector(self.x, self.y)
-    
-    @property
-    def heading_line(self) -> tuple:
-        """
-        Point in direction boid is facing
-        """
-        return self.get_draw_point(self.heading, 2)
-
-    @property
-    def draw_points(self) -> list:
-        """
-        Points for drawing boid (connect points together)
-        """
-        head = self.get_draw_point(self.heading)
-        point_1 = self.get_draw_point(self.heading+5*math.pi/6)
-        point_2 = self.get_draw_point(self.heading-5*math.pi/6)
-        middle_point = self.get_draw_point(self.heading+math.pi, 0.5)
-        return [head, point_1, middle_point, point_2]
+        super().__init__(size, "#FFFFFF", max_speed, avoid_dist, initial_pos, initial_heading_degrees)
 
     def __get_noise_vector(self) -> Vector:
         """
@@ -76,7 +33,7 @@ class Boid:
             distance = (posv-self.posv).magnitude
             if distance == 0:
                 distance = 0.01 # prevent zero division error
-            if distance <= BOID_AVOID_DIST:
+            if distance <= self.avoid_dist:
                 sep_vectors.append(1/(self.posv-posv))
             heading_vectors.append(Vector(math.cos(heading)*100*(1/distance), math.sin(heading)*100*(1/distance)))
             centre_of_mass += posv

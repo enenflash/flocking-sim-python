@@ -1,7 +1,6 @@
 import pygame as pg
-from .settings import *
-from .obstacle import *
-from .boid import *
+from src.settings import *
+from src.models import *
 
 pg.init()
 

@@ -1,4 +1,4 @@
-from .vector import *
+from src.models.vector import *
 
 class Obstacle:
     def __init__ (self, radius:int|float, posv:Vector) -> None:

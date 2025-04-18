@@ -1,2 +1,2 @@
 from .sim import *
-from .pg_interface import *
+from .drawing.pg_interface import *
