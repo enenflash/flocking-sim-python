@@ -63,6 +63,11 @@ class PGInterface:
         pg.draw.line(self.__screen, boid.colour, boid.pos, boid.heading_line)
         pg.draw.polygon(self.__screen, boid.colour, boid.draw_points, 3)
 
+    def display_boid_info(self, boid:Boid) -> None:
+        display_text = f"Boid pos: ({round(boid.x, 2)}, {round(boid.y, 2)})  Boid heading: {round(boid.heading, 2)}"
+        display_info = self.__font.render(display_text, False, "RED", "BLACK")
+        self.__screen.blit(display_info, (0, self.SCREEN_H-display_info.get_height()))
+
     def load_screen(self) -> None:
         display_text = f"Boids: {self.num_boids}  Obstacles: {self.num_obstacles}  TargetFPS: {FPS}  FPS: {round(self.__clock.get_fps(), 2)}"
         display_info = self.__font.render(display_text, False, "GREEN", "BLACK")

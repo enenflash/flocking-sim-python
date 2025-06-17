@@ -111,6 +111,7 @@ class Sim:
             self.__keep_boid_onscreen(boid)
             # draw boid
             if boid_index == self.target_boid_index:
+                self.output_interface.display_boid_info(boid)
                 self.output_interface.draw_boid_details(boid)
             self.output_interface.draw_boid(boid)
         
