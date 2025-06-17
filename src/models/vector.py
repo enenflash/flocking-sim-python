@@ -12,6 +12,10 @@ class Vector:
     @staticmethod
     def from_tuple(components:tuple[int|float, int|float]) -> Vector:
         return Vector(components[0], components[1])
+    
+    @staticmethod
+    def from_polar(argument_radians:int|float, magnitude:int|float) -> Vector:
+        return Vector(math.cos(argument_radians)*magnitude, math.sin(argument_radians)*magnitude)
 
     @property
     def tup(self) -> tuple:
