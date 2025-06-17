@@ -2,6 +2,7 @@ import math, random
 
 from .boid import *
 from .vector import *
+from .boid_settings import *
 
 class SimpleBoid(Boid):
     def __init__ (self, size:int|float, max_speed:int|float,  initial_pos:tuple|Vector, initial_heading_degrees:int|float, avoid_dist:int|float) -> None:
@@ -22,7 +23,7 @@ class SimpleBoid(Boid):
         """
         new_heading = random.randint(-5, 5)*math.pi/180 + self.heading
         speed = random.randint(1, 10)/10
-        return Vector(math.cos(new_heading), math.sin(new_heading)).unit*speed
+        return Vector.from_polar(new_heading, speed)
     
     def __get_boid_vectors(self, local_boids:list[tuple]) -> tuple[Vector, Vector, Vector]:
         """
@@ -35,7 +36,7 @@ class SimpleBoid(Boid):
                 distance = 0.01 # prevent zero division error
             if distance <= self.avoid_dist:
                 sep_vectors.append(1/(self.posv-posv))
-            heading_vectors.append(Vector(math.cos(heading)*100*(1/distance), math.sin(heading)*100*(1/distance)))
+            heading_vectors.append(Vector.from_polar(heading, 100/distance))
             centre_of_mass += posv
         
         seperation_v = Vector(0, 0) if len(sep_vectors) == 0 else sum(sep_vectors).unit
@@ -69,7 +70,7 @@ class SimpleBoid(Boid):
         delta_heading = vect.heading - self.heading
         if delta_heading != 0:
             heading_dir = choose_dir(delta_heading, get_alt_heading(delta_heading))
-            self.heading += heading_dir*0.3
+            self.heading += heading_dir*0.1 #0.3
         self.__move(vect.magnitude, delta_time)
     
     def update(self, delta_time:int|float, local_boids:list[tuple], local_obstacles:list[Vector]) -> None:
@@ -81,4 +82,5 @@ class SimpleBoid(Boid):
         seperation_v, alignment_v, cohesion_v = self.__get_boid_vectors(local_boids)
         avoid_v = self.__get_obstacle_avoidance_vector(local_obstacles)
 
-        self.__calculate_move(delta_time, (noise_v*0.5+seperation_v*2+alignment_v*5+cohesion_v*0.4+avoid_v*7)/15)
+        # 0.5, 2, 3, 0.4, 7
+        self.__calculate_move(delta_time, (noise_v*NOISE_SCALAR+seperation_v*SEPARATION_SCALAR+alignment_v*ALIGNMENT_SCALAR+cohesion_v*COHESION_SCALAR+avoid_v*AVOIDENCE_SCALAR)/15)
